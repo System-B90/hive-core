@@ -1,11 +1,11 @@
 {
-    "name": "@system-b15/hive-core",
-    "version": "0.1.1",
-    "description": "Hive LMS entity types, error hierarchy, and API client core shared across System-B15 apps",
+    "name": "@system-b90/hive-core",
+    "version": "0.1.2",
+    "description": "Hive LMS entity types, error hierarchy, and API client core shared across System-B90 apps",
     "license": "UNLICENSED",
     "repository": {
         "type": "git",
-        "url": "https://github.com/System-B15/hive-core.git"
+        "url": "https://github.com/System-B90/hive-core.git"
     },
     "publishConfig": {
         "registry": "https://npm.pkg.github.com"

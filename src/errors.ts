@@ -1,5 +1,5 @@
 /*
- * Shared client/server error hierarchy for System-B15 apps.
+ * Shared client/server error hierarchy for System-B90 apps.
  * Canonical source: Bluz `api-shared/errors`, folded with peek-a-boo's
  * Hive connection errors and network-error parsers.
  */

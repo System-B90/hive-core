@@ -1,5 +1,5 @@
 /*
- * Hive LMS entity types shared by all System-B15 consumers.
+ * Hive LMS entity types shared by all System-B90 consumers.
  *
  * Note: This file does not update automatically.
  * DRF-Spectacular outputs enum values in the description: https://github.com/tfranzel/drf-spectacular/pull/952
