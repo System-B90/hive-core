@@ -1,0 +1,33 @@
+{
+    "name": "@system-b15/hive-core",
+    "version": "0.1.1",
+    "description": "Hive LMS entity types, error hierarchy, and API client core shared across System-B15 apps",
+    "license": "UNLICENSED",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/System-B15/hive-core.git"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    },
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
+    },
+    "devDependencies": {
+        "typescript": "^5.9.0",
+        "@types/node": "^20"
+    }
+}
