@@ -592,8 +592,11 @@ export class HiveClient {
         );
     }
 
-    async getSsoClientInfo(): Promise<SsoClientInfo> {
-        return await this._get<SsoClientInfo>(this.buildUrl("/api/core/sso/client-info/"));
+    async getSsoClientInfo(clientId: string): Promise<SsoClientInfo> {
+        const params = new URLSearchParams({ client_id: clientId });
+        return await this._get<SsoClientInfo>(
+            this.buildUrl(`/api/core/sso/client-info/?${params.toString()}`),
+        );
     }
 
     async getServerTime(): Promise<string> {

@@ -24,7 +24,9 @@
     ],
     "scripts": {
         "build": "tsc -p tsconfig.json",
-        "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
+        "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
+        "pretest": "npm run build",
+        "test": "node --experimental-strip-types --test tests/integration/*.test.ts"
     },
     "devDependencies": {
         "typescript": "^5.9.0",

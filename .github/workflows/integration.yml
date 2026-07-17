@@ -1,0 +1,65 @@
+name: Integration Tests
+
+on:
+    workflow_dispatch:
+    pull_request:
+        branches: [master]
+    push:
+        branches: [master]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    hive-client-integration:
+        name: HiveClient vs real Hive
+        runs-on: ubuntu-24.04
+        timeout-minutes: 45
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v7
+
+            # Shared org action: disk cleanup, token verify, Hive checkout,
+            # commit-keyed image cache (or registry pull), boot + init,
+            # readiness check. Same action Bluz/Peek-a-boo/Madash use for E2E.
+            - name: Set up Hive
+              uses: System-B90/.github/actions/setup-hive@main
+              with:
+                  hive-token: ${{ secrets.CLASSIC_ACCESS_TOKEN || secrets.HIVE_REPO_TOKEN }}
+                  python-version: "3.13"
+
+            - name: Set up Node
+              uses: actions/setup-node@v5
+              with:
+                  node-version: "22"
+
+            - name: Install dependencies
+              run: npm ci
+
+            # Hive's nginx serves the sample self-signed cert setup-hive maps
+            # to hive.org — same relaxation the other consumer repos' E2E
+            # workflows use to talk to it.
+            - name: Run integration tests against real Hive
+              run: npm test
+              env:
+                  NODE_TLS_REJECT_UNAUTHORIZED: "0"
+                  HIVE_TEST_URL: https://hive.org
+
+            - name: Dump Hive container logs
+              if: failure()
+              run: |
+                  mkdir -p container-logs
+                  for c in $(docker ps -aq); do
+                    name=$(docker inspect --format '{{.Name}}' "$c" | tr -d '/')
+                    docker logs "$c" > "container-logs/$name.log" 2>&1 || true
+                  done
+
+            - name: Upload Hive container logs
+              uses: actions/upload-artifact@v6
+              if: failure()
+              with:
+                  name: hive-container-logs
+                  path: container-logs/
+                  retention-days: 7
