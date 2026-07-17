@@ -21,22 +21,27 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v7
 
-            # Shared org action: disk cleanup, token verify, Hive checkout,
-            # boot + init, readiness check. Same action Bluz/Peek-a-boo/Madash
-            # use for E2E. image-source: registry pulls pyhive's nightly-built
-            # images (ghcr.io/system-b90/hive/*) instead of rebuilding Hive
-            # from source on every run — the action's own registry-prefix
-            # default (ghcr.io/system-b15/hive) is stale post-rebrand, so it's
-            # pinned here explicitly. registry-tag matches pyhive's branch tag
-            # for the same hive-ref (feature/sso -> feature-sso).
+            # Shared org action: disk cleanup, boot + init, readiness check.
+            # Same action Bluz/Peek-a-boo/Madash use for E2E.
+            # image-source: registry pulls pyhive's nightly-built images
+            # (ghcr.io/system-b90/hive/*) and reads docker-compose.yaml/.env
+            # from pyhive's public hive-stack/ directory — no Hive checkout,
+            # no PAT needed at all. The action's own registry-prefix default
+            # (ghcr.io/system-b15/hive) is stale post-rebrand, so it's pinned
+            # here explicitly; registry-tag is left unset so it defaults to
+            # the exact HIVE_SHA hive-stack/ recorded at publish time.
+            #
+            # Requires System-B90/.github#<companion-PR> (setup-hive: make
+            # hive-token optional, read config from pyhive's hive-stack/ in
+            # registry mode) and System-B90/pyhive#8 (export hive-stack/) to
+            # both be merged first — until then this step fails with "no
+            # hive-stack/docker-compose.yaml found".
             - name: Set up Hive
               uses: System-B90/.github/actions/setup-hive@main
               with:
-                  hive-token: ${{ secrets.CLASSIC_ACCESS_TOKEN || secrets.HIVE_REPO_TOKEN }}
                   python-version: "3.13"
                   image-source: registry
                   registry-prefix: ghcr.io/system-b90/hive
-                  registry-tag: feature-sso
 
             - name: Set up Node
               uses: actions/setup-node@v5
