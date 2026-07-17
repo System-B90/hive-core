@@ -81,6 +81,164 @@ export class HiveClient {
     protected refreshTokenValue?: string;
     protected hiveBaseUrl: string;
 
+    readonly assignment: {
+        list: HiveClient["getAssignments"];
+        get: HiveClient["getAssignment"];
+        create: HiveClient["createAssignment"];
+        update: HiveClient["updateAssignment"];
+        patch: HiveClient["patchAssignment"];
+        delete: HiveClient["deleteAssignment"];
+    };
+    readonly assignmentResponse: {
+        list: HiveClient["getAssignmentResponses"];
+        get: HiveClient["getAssignmentResponse"];
+        create: HiveClient["createAssignmentResponse"];
+        update: HiveClient["updateAssignmentResponse"];
+        patch: HiveClient["patchAssignmentResponse"];
+        delete: HiveClient["deleteAssignmentResponse"];
+    };
+    readonly exercise: {
+        list: HiveClient["getExercises"];
+        get: HiveClient["getExercise"];
+        create: HiveClient["createExercise"];
+        update: HiveClient["updateExercise"];
+        patch: HiveClient["patchExercise"];
+        delete: HiveClient["deleteExercise"];
+    };
+    readonly program: {
+        list: HiveClient["getPrograms"];
+        get: HiveClient["getProgram"];
+        create: HiveClient["createProgram"];
+        update: HiveClient["updateProgram"];
+        patch: HiveClient["patchProgram"];
+        delete: HiveClient["deleteProgram"];
+    };
+    readonly subject: {
+        list: HiveClient["getSubjects"];
+        get: HiveClient["getSubject"];
+        create: HiveClient["createSubject"];
+        update: HiveClient["updateSubject"];
+        patch: HiveClient["patchSubject"];
+        delete: HiveClient["deleteSubject"];
+    };
+    readonly module: {
+        list: HiveClient["getModules"];
+        get: HiveClient["getModule"];
+        create: HiveClient["createModule"];
+        update: HiveClient["updateModule"];
+        patch: HiveClient["patchModule"];
+        delete: HiveClient["deleteModule"];
+    };
+    readonly help: {
+        list: HiveClient["getHelps"];
+        get: HiveClient["getHelp"];
+        create: HiveClient["createHelp"];
+        update: HiveClient["updateHelp"];
+        patch: HiveClient["patchHelp"];
+        delete: HiveClient["deleteHelp"];
+    };
+    readonly helpResponse: {
+        list: HiveClient["getHelpResponses"];
+        get: HiveClient["getHelpResponse"];
+        create: HiveClient["createHelpResponse"];
+        update: HiveClient["updateHelpResponse"];
+        patch: HiveClient["patchHelpResponse"];
+        delete: HiveClient["deleteHelpResponse"];
+    };
+    readonly notification: {
+        list: HiveClient["getNotifications"];
+        get: HiveClient["getNotification"];
+        create: HiveClient["createNotification"];
+        update: HiveClient["updateNotification"];
+        patch: HiveClient["patchNotification"];
+        delete: HiveClient["deleteNotification"];
+    };
+    readonly queue: {
+        list: HiveClient["getQueues"];
+        get: HiveClient["getQueue"];
+        create: HiveClient["createQueue"];
+        update: HiveClient["updateQueue"];
+        patch: HiveClient["patchQueue"];
+        delete: HiveClient["deleteQueue"];
+    };
+    readonly scheduleColor: {
+        list: HiveClient["getScheduleColors"];
+        get: HiveClient["getScheduleColor"];
+        create: HiveClient["createScheduleColor"];
+        update: HiveClient["updateScheduleColor"];
+        patch: HiveClient["patchScheduleColor"];
+        delete: HiveClient["deleteScheduleColor"];
+    };
+    readonly scheduleEvent: {
+        list: HiveClient["getScheduleEvents"];
+        get: HiveClient["getScheduleEvent"];
+        create: HiveClient["createScheduleEvent"];
+        update: HiveClient["updateScheduleEvent"];
+        patch: HiveClient["patchScheduleEvent"];
+        delete: HiveClient["deleteScheduleEvent"];
+    };
+    readonly scheduleKiosk: {
+        list: HiveClient["getScheduleKiosks"];
+        get: HiveClient["getScheduleKiosk"];
+        create: HiveClient["createScheduleKiosk"];
+        update: HiveClient["updateScheduleKiosk"];
+        patch: HiveClient["patchScheduleKiosk"];
+        delete: HiveClient["deleteScheduleKiosk"];
+    };
+    readonly lessonRule: {
+        list: HiveClient["getLessonRules"];
+        get: HiveClient["getLessonRule"];
+        create: HiveClient["createLessonRule"];
+        update: HiveClient["updateLessonRule"];
+        patch: HiveClient["patchLessonRule"];
+        delete: HiveClient["deleteLessonRule"];
+    };
+    readonly ssoApplication: {
+        list: HiveClient["getSsoApplications"];
+        get: HiveClient["getSsoApplication"];
+        create: HiveClient["createSsoApplication"];
+        update: HiveClient["updateSsoApplication"];
+        patch: HiveClient["patchSsoApplication"];
+        delete: HiveClient["deleteSsoApplication"];
+    };
+    readonly tag: {
+        list: HiveClient["getTags"];
+        get: HiveClient["getTag"];
+        create: HiveClient["createTag"];
+        update: HiveClient["updateTag"];
+        patch: HiveClient["patchTag"];
+        delete: HiveClient["deleteTag"];
+    };
+    readonly seating: {
+        list: HiveClient["getSeatings"];
+        get: HiveClient["getSeating"];
+        create: HiveClient["createSeating"];
+        update: HiveClient["updateSeating"];
+        patch: HiveClient["patchSeating"];
+        delete: HiveClient["deleteSeating"];
+    };
+    readonly lesson: {
+        list: HiveClient["getLessons"];
+        get: HiveClient["getLesson"];
+        create: HiveClient["createLesson"];
+        update: HiveClient["updateLesson"];
+        patch: HiveClient["patchLesson"];
+        delete: HiveClient["deleteLesson"];
+        setForClass: HiveClient["setLessonForClass"];
+    };
+    readonly class: {
+        list: HiveClient["getClasses"];
+    };
+    readonly user: {
+        list: HiveClient["getUsers"];
+        register: HiveClient["registerCourseUser"];
+    };
+    readonly me: {
+        get: HiveClient["getMe"];
+        patch: HiveClient["patchMe"];
+        checkIn: HiveClient["checkIn"];
+    };
+
     constructor(
         accessToken: string,
         refreshToken?: string,
@@ -92,6 +250,164 @@ export class HiveClient {
         // specific instance, falling back to the default env URL.
         this.hiveBaseUrl =
             hiveBaseUrl ?? process.env.NEXT_PUBLIC_HIVE_URL ?? "";
+
+        this.assignment = {
+            list: this.getAssignments.bind(this),
+            get: this.getAssignment.bind(this),
+            create: this.createAssignment.bind(this),
+            update: this.updateAssignment.bind(this),
+            patch: this.patchAssignment.bind(this),
+            delete: this.deleteAssignment.bind(this),
+        };
+        this.assignmentResponse = {
+            list: this.getAssignmentResponses.bind(this),
+            get: this.getAssignmentResponse.bind(this),
+            create: this.createAssignmentResponse.bind(this),
+            update: this.updateAssignmentResponse.bind(this),
+            patch: this.patchAssignmentResponse.bind(this),
+            delete: this.deleteAssignmentResponse.bind(this),
+        };
+        this.exercise = {
+            list: this.getExercises.bind(this),
+            get: this.getExercise.bind(this),
+            create: this.createExercise.bind(this),
+            update: this.updateExercise.bind(this),
+            patch: this.patchExercise.bind(this),
+            delete: this.deleteExercise.bind(this),
+        };
+        this.program = {
+            list: this.getPrograms.bind(this),
+            get: this.getProgram.bind(this),
+            create: this.createProgram.bind(this),
+            update: this.updateProgram.bind(this),
+            patch: this.patchProgram.bind(this),
+            delete: this.deleteProgram.bind(this),
+        };
+        this.subject = {
+            list: this.getSubjects.bind(this),
+            get: this.getSubject.bind(this),
+            create: this.createSubject.bind(this),
+            update: this.updateSubject.bind(this),
+            patch: this.patchSubject.bind(this),
+            delete: this.deleteSubject.bind(this),
+        };
+        this.module = {
+            list: this.getModules.bind(this),
+            get: this.getModule.bind(this),
+            create: this.createModule.bind(this),
+            update: this.updateModule.bind(this),
+            patch: this.patchModule.bind(this),
+            delete: this.deleteModule.bind(this),
+        };
+        this.help = {
+            list: this.getHelps.bind(this),
+            get: this.getHelp.bind(this),
+            create: this.createHelp.bind(this),
+            update: this.updateHelp.bind(this),
+            patch: this.patchHelp.bind(this),
+            delete: this.deleteHelp.bind(this),
+        };
+        this.helpResponse = {
+            list: this.getHelpResponses.bind(this),
+            get: this.getHelpResponse.bind(this),
+            create: this.createHelpResponse.bind(this),
+            update: this.updateHelpResponse.bind(this),
+            patch: this.patchHelpResponse.bind(this),
+            delete: this.deleteHelpResponse.bind(this),
+        };
+        this.notification = {
+            list: this.getNotifications.bind(this),
+            get: this.getNotification.bind(this),
+            create: this.createNotification.bind(this),
+            update: this.updateNotification.bind(this),
+            patch: this.patchNotification.bind(this),
+            delete: this.deleteNotification.bind(this),
+        };
+        this.queue = {
+            list: this.getQueues.bind(this),
+            get: this.getQueue.bind(this),
+            create: this.createQueue.bind(this),
+            update: this.updateQueue.bind(this),
+            patch: this.patchQueue.bind(this),
+            delete: this.deleteQueue.bind(this),
+        };
+        this.scheduleColor = {
+            list: this.getScheduleColors.bind(this),
+            get: this.getScheduleColor.bind(this),
+            create: this.createScheduleColor.bind(this),
+            update: this.updateScheduleColor.bind(this),
+            patch: this.patchScheduleColor.bind(this),
+            delete: this.deleteScheduleColor.bind(this),
+        };
+        this.scheduleEvent = {
+            list: this.getScheduleEvents.bind(this),
+            get: this.getScheduleEvent.bind(this),
+            create: this.createScheduleEvent.bind(this),
+            update: this.updateScheduleEvent.bind(this),
+            patch: this.patchScheduleEvent.bind(this),
+            delete: this.deleteScheduleEvent.bind(this),
+        };
+        this.scheduleKiosk = {
+            list: this.getScheduleKiosks.bind(this),
+            get: this.getScheduleKiosk.bind(this),
+            create: this.createScheduleKiosk.bind(this),
+            update: this.updateScheduleKiosk.bind(this),
+            patch: this.patchScheduleKiosk.bind(this),
+            delete: this.deleteScheduleKiosk.bind(this),
+        };
+        this.lessonRule = {
+            list: this.getLessonRules.bind(this),
+            get: this.getLessonRule.bind(this),
+            create: this.createLessonRule.bind(this),
+            update: this.updateLessonRule.bind(this),
+            patch: this.patchLessonRule.bind(this),
+            delete: this.deleteLessonRule.bind(this),
+        };
+        this.ssoApplication = {
+            list: this.getSsoApplications.bind(this),
+            get: this.getSsoApplication.bind(this),
+            create: this.createSsoApplication.bind(this),
+            update: this.updateSsoApplication.bind(this),
+            patch: this.patchSsoApplication.bind(this),
+            delete: this.deleteSsoApplication.bind(this),
+        };
+        this.tag = {
+            list: this.getTags.bind(this),
+            get: this.getTag.bind(this),
+            create: this.createTag.bind(this),
+            update: this.updateTag.bind(this),
+            patch: this.patchTag.bind(this),
+            delete: this.deleteTag.bind(this),
+        };
+        this.seating = {
+            list: this.getSeatings.bind(this),
+            get: this.getSeating.bind(this),
+            create: this.createSeating.bind(this),
+            update: this.updateSeating.bind(this),
+            patch: this.patchSeating.bind(this),
+            delete: this.deleteSeating.bind(this),
+        };
+        this.lesson = {
+            list: this.getLessons.bind(this),
+            get: this.getLesson.bind(this),
+            create: this.createLesson.bind(this),
+            update: this.updateLesson.bind(this),
+            patch: this.patchLesson.bind(this),
+            delete: this.deleteLesson.bind(this),
+            setForClass: this.setLessonForClass.bind(this),
+        };
+        this.class = {
+            list: this.getClasses.bind(this),
+        };
+        this.user = {
+            list: this.getUsers.bind(this),
+            register: this.registerCourseUser.bind(this),
+        };
+        this.me = {
+            get: this.getMe.bind(this),
+            patch: this.patchMe.bind(this),
+            checkIn: this.checkIn.bind(this),
+        };
     }
 
     protected buildUrl(path: string): string {
