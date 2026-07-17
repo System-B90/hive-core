@@ -26,10 +26,14 @@
         "build": "tsc -p tsconfig.json",
         "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
         "pretest": "npm run build",
-        "test": "node --experimental-strip-types --test tests/integration/*.test.ts"
+        "test": "node --experimental-strip-types --test tests/integration/*.test.ts",
+        "lint": "eslint ."
     },
     "devDependencies": {
         "typescript": "^5.9.0",
-        "@types/node": "^20"
+        "@types/node": "^20",
+        "@eslint/js": "^10.0.1",
+        "eslint": "^10.7.0",
+        "typescript-eslint": "^8.63.0"
     }
 }

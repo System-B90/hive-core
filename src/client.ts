@@ -603,6 +603,7 @@ export class HiveClient {
         return await this._get<string>(this.buildUrl("/api/core/time/"));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
     async getAssignments(params?: Record<string, any>): Promise<Array<Assignment>> {
         const queryString = new URLSearchParams(params).toString();
         return await this._get<Array<Assignment>>(
@@ -697,6 +698,7 @@ export class HiveClient {
         );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
     async getExercises(params?: Record<string, any>): Promise<Array<Exercise>> {
         const queryString = new URLSearchParams(params).toString();
         return await this._get<Array<Exercise>>(
@@ -856,6 +858,7 @@ export class HiveClient {
         );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
     async getHelps(params?: Record<string, any>): Promise<Array<Help>> {
         const queryString = new URLSearchParams(params).toString();
         return await this._get<Array<Help>>(this.buildUrl(`/api/core/help/?${queryString}`));
@@ -936,6 +939,7 @@ export class HiveClient {
         );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
     async getNotifications(params?: Record<string, any>): Promise<Array<Notification>> {
         const queryString = new URLSearchParams(params).toString();
         return await this._get<Array<Notification>>(
@@ -1051,6 +1055,7 @@ export class HiveClient {
         );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
     async getScheduleEvents(params?: Record<string, any>): Promise<Array<ScheduleEvent>> {
         const queryString = new URLSearchParams(params).toString();
         return await this._get<Array<ScheduleEvent>>(
@@ -1138,6 +1143,7 @@ export class HiveClient {
         );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
     async getLessons(params?: Record<string, any>): Promise<Array<Lesson>> {
         const queryString = new URLSearchParams(params).toString();
         return await this._get<Array<Lesson>>(
