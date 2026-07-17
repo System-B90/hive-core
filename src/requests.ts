@@ -5,10 +5,12 @@
  */
 
 import {
+    AssignmentResponseTypeEnum,
     AssignmentStatusEnum,
     EventTypeEnum,
     ExercisePreviewTypes,
     GenderEnum,
+    HelpResponseTypeEnum,
     HelpTypeEnum,
     PatbasEnum,
     StatusEnum,
@@ -25,6 +27,31 @@ export type LessonRuleRequest = {
     parent_rule?: null | number;
     student_groups?: Array<number>;
     queue?: null | number;
+};
+
+export type AssignmentResponseContentRequest = {
+    content: string;
+    field: number;
+};
+
+export type AssignmentResponseRequest = {
+    contents: Array<AssignmentResponseContentRequest>;
+    /** @maxLength 255 */
+    file_name?: string;
+    dear_student?: boolean;
+    hide_checker_name?: boolean;
+    segel_only?: boolean;
+    response_type: AssignmentResponseTypeEnum;
+};
+
+export type HelpResponseRequest = {
+    contents?: string;
+    /** @maxLength 255 */
+    file_name?: string;
+    dear_student?: boolean;
+    hide_checker_name?: boolean;
+    segel_only?: boolean;
+    response_type: HelpResponseTypeEnum;
 };
 
 export type QueueRequest = {

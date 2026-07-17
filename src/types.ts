@@ -196,6 +196,80 @@ export type LessonRule = {
     readonly student_groups_data: Array<Class> | null;
 };
 
+export type ActionEnum = (typeof ActionEnum)[keyof typeof ActionEnum];
+
+export const ActionEnum = {
+    Handling: "Handling",
+    No_Check: "No Check",
+    Built: "Built",
+    Finished: "Finished",
+    Sending: "Sending",
+    Error: "Error",
+    Success: "Success",
+} as const;
+
+export type Status = {
+    readonly id: number;
+    readonly time: string;
+    action: ActionEnum;
+    payload?: string;
+};
+
+export type AssignmentResponseContent = {
+    content: string;
+    field: number;
+};
+
+export type AssignmentResponseTypeEnum =
+    (typeof AssignmentResponseTypeEnum)[keyof typeof AssignmentResponseTypeEnum];
+
+export const AssignmentResponseTypeEnum = {
+    Comment: "Comment",
+    Work_In_Progress: "Work In Progress",
+    Submission: "Submission",
+    AutoCheck: "AutoCheck",
+    Redo: "Redo",
+    Done: "Done",
+} as const;
+
+/** A student's submission/comment on an Assignment (`/assignments/{parentId}/responses/`). */
+export type AssignmentResponse = {
+    readonly id: number;
+    readonly user: number;
+    contents: Array<AssignmentResponseContent>;
+    /** @maxLength 255 */
+    file_name?: string;
+    dear_student?: boolean;
+    readonly date: string;
+    hide_checker_name?: boolean;
+    segel_only?: boolean;
+    response_type: AssignmentResponseTypeEnum;
+    readonly autocheck_statuses: Array<Status> | null;
+};
+
+export type HelpResponseTypeEnum =
+    (typeof HelpResponseTypeEnum)[keyof typeof HelpResponseTypeEnum];
+
+export const HelpResponseTypeEnum = {
+    Resolve: "Resolve",
+    Open: "Open",
+    Comment: "Comment",
+} as const;
+
+/** A reply on a Help ticket (`/help/{parentId}/responses/`). */
+export type HelpResponse = {
+    readonly id: number;
+    readonly user: number;
+    contents?: string;
+    /** @maxLength 255 */
+    file_name?: string;
+    dear_student?: boolean;
+    readonly date: string;
+    hide_checker_name?: boolean;
+    segel_only?: boolean;
+    response_type: HelpResponseTypeEnum;
+};
+
 export type AssignmentStatusEnum =
     (typeof AssignmentStatusEnum)[keyof typeof AssignmentStatusEnum];
 

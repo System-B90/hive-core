@@ -8,11 +8,13 @@
 import { HiveClientError } from "./errors.js";
 import {
     Assignment,
+    AssignmentResponse,
     Class,
     ClassTypeEnum,
     CourseUser,
     Exercise,
     Help,
+    HelpResponse,
     Lesson,
     LessonRule,
     Module,
@@ -31,8 +33,10 @@ import {
 } from "./types.js";
 import {
     AssignmentRequest,
+    AssignmentResponseRequest,
     ExerciseRequest,
     HelpRequest,
+    HelpResponseRequest,
     LessonRequest,
     LessonRuleRequest,
     ModuleRequest,
@@ -319,6 +323,61 @@ export class HiveClient {
         return await this._request<void>(this.buildUrl(`/api/core/assignments/${id}/`), "DELETE");
     }
 
+    /** A student's submissions/comments on an assignment. */
+    async getAssignmentResponses(parentId: number): Promise<Array<AssignmentResponse>> {
+        return await this._get<Array<AssignmentResponse>>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/`),
+        );
+    }
+
+    async getAssignmentResponse(parentId: number, id: number): Promise<AssignmentResponse> {
+        return await this._get<AssignmentResponse>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/${id}/`),
+        );
+    }
+
+    async createAssignmentResponse(
+        parentId: number,
+        data: AssignmentResponseRequest,
+    ): Promise<AssignmentResponse> {
+        return await this._request<AssignmentResponse>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/`),
+            "POST",
+            data,
+        );
+    }
+
+    async updateAssignmentResponse(
+        parentId: number,
+        id: number,
+        data: AssignmentResponseRequest,
+    ): Promise<AssignmentResponse> {
+        return await this._request<AssignmentResponse>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchAssignmentResponse(
+        parentId: number,
+        id: number,
+        data: Partial<AssignmentResponseRequest>,
+    ): Promise<AssignmentResponse> {
+        return await this._request<AssignmentResponse>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteAssignmentResponse(parentId: number, id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/${id}/`),
+            "DELETE",
+        );
+    }
+
     async getExercises(params?: Record<string, any>): Promise<Array<Exercise>> {
         const queryString = new URLSearchParams(params).toString();
         return await this._get<Array<Exercise>>(
@@ -501,6 +560,61 @@ export class HiveClient {
 
     async deleteHelp(id: number): Promise<void> {
         return await this._request<void>(this.buildUrl(`/api/core/help/${id}/`), "DELETE");
+    }
+
+    /** Replies on a help ticket. */
+    async getHelpResponses(parentId: number): Promise<Array<HelpResponse>> {
+        return await this._get<Array<HelpResponse>>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/`),
+        );
+    }
+
+    async getHelpResponse(parentId: number, id: number): Promise<HelpResponse> {
+        return await this._get<HelpResponse>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/${id}/`),
+        );
+    }
+
+    async createHelpResponse(
+        parentId: number,
+        data: HelpResponseRequest,
+    ): Promise<HelpResponse> {
+        return await this._request<HelpResponse>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/`),
+            "POST",
+            data,
+        );
+    }
+
+    async updateHelpResponse(
+        parentId: number,
+        id: number,
+        data: HelpResponseRequest,
+    ): Promise<HelpResponse> {
+        return await this._request<HelpResponse>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchHelpResponse(
+        parentId: number,
+        id: number,
+        data: Partial<HelpResponseRequest>,
+    ): Promise<HelpResponse> {
+        return await this._request<HelpResponse>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteHelpResponse(parentId: number, id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/${id}/`),
+            "DELETE",
+        );
     }
 
     async getNotifications(params?: Record<string, any>): Promise<Array<Notification>> {
