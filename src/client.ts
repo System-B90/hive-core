@@ -6,7 +6,53 @@
  */
 
 import { HiveClientError } from "./errors.js";
-import { Class, ClassTypeEnum, CourseUser } from "./types.js";
+import {
+    Assignment,
+    AssignmentResponse,
+    Class,
+    ClassTypeEnum,
+    CourseUser,
+    Exercise,
+    Help,
+    HelpResponse,
+    Lesson,
+    LessonRule,
+    Module,
+    Notification,
+    Program,
+    Queue,
+    RegisterCourseUser,
+    Seating,
+    ScheduleColor,
+    ScheduleEvent,
+    ScheduleKiosk,
+    SsoApplication,
+    SsoClientInfo,
+    Subject,
+    Tag,
+} from "./types.js";
+import {
+    AssignmentRequest,
+    AssignmentResponseRequest,
+    ExerciseRequest,
+    HelpRequest,
+    HelpResponseRequest,
+    LessonRequest,
+    LessonRuleRequest,
+    ModuleRequest,
+    NotificationRequest,
+    PatchedMeRequest,
+    ProgramRequest,
+    QueueRequest,
+    RegisterCourseUserRequest,
+    SeatingRequest,
+    ScheduleColorRequest,
+    ScheduleEventRequest,
+    ScheduleKioskRequest,
+    SsoApplicationRequest,
+    SubjectRequest,
+    TagRequest,
+} from "./requests.js";
 
 type TimeoutError = {
     name: "TypeError";
@@ -35,6 +81,164 @@ export class HiveClient {
     protected refreshTokenValue?: string;
     protected hiveBaseUrl: string;
 
+    readonly assignment: {
+        list: HiveClient["getAssignments"];
+        get: HiveClient["getAssignment"];
+        create: HiveClient["createAssignment"];
+        update: HiveClient["updateAssignment"];
+        patch: HiveClient["patchAssignment"];
+        delete: HiveClient["deleteAssignment"];
+    };
+    readonly assignmentResponse: {
+        list: HiveClient["getAssignmentResponses"];
+        get: HiveClient["getAssignmentResponse"];
+        create: HiveClient["createAssignmentResponse"];
+        update: HiveClient["updateAssignmentResponse"];
+        patch: HiveClient["patchAssignmentResponse"];
+        delete: HiveClient["deleteAssignmentResponse"];
+    };
+    readonly exercise: {
+        list: HiveClient["getExercises"];
+        get: HiveClient["getExercise"];
+        create: HiveClient["createExercise"];
+        update: HiveClient["updateExercise"];
+        patch: HiveClient["patchExercise"];
+        delete: HiveClient["deleteExercise"];
+    };
+    readonly program: {
+        list: HiveClient["getPrograms"];
+        get: HiveClient["getProgram"];
+        create: HiveClient["createProgram"];
+        update: HiveClient["updateProgram"];
+        patch: HiveClient["patchProgram"];
+        delete: HiveClient["deleteProgram"];
+    };
+    readonly subject: {
+        list: HiveClient["getSubjects"];
+        get: HiveClient["getSubject"];
+        create: HiveClient["createSubject"];
+        update: HiveClient["updateSubject"];
+        patch: HiveClient["patchSubject"];
+        delete: HiveClient["deleteSubject"];
+    };
+    readonly module: {
+        list: HiveClient["getModules"];
+        get: HiveClient["getModule"];
+        create: HiveClient["createModule"];
+        update: HiveClient["updateModule"];
+        patch: HiveClient["patchModule"];
+        delete: HiveClient["deleteModule"];
+    };
+    readonly help: {
+        list: HiveClient["getHelps"];
+        get: HiveClient["getHelp"];
+        create: HiveClient["createHelp"];
+        update: HiveClient["updateHelp"];
+        patch: HiveClient["patchHelp"];
+        delete: HiveClient["deleteHelp"];
+    };
+    readonly helpResponse: {
+        list: HiveClient["getHelpResponses"];
+        get: HiveClient["getHelpResponse"];
+        create: HiveClient["createHelpResponse"];
+        update: HiveClient["updateHelpResponse"];
+        patch: HiveClient["patchHelpResponse"];
+        delete: HiveClient["deleteHelpResponse"];
+    };
+    readonly notification: {
+        list: HiveClient["getNotifications"];
+        get: HiveClient["getNotification"];
+        create: HiveClient["createNotification"];
+        update: HiveClient["updateNotification"];
+        patch: HiveClient["patchNotification"];
+        delete: HiveClient["deleteNotification"];
+    };
+    readonly queue: {
+        list: HiveClient["getQueues"];
+        get: HiveClient["getQueue"];
+        create: HiveClient["createQueue"];
+        update: HiveClient["updateQueue"];
+        patch: HiveClient["patchQueue"];
+        delete: HiveClient["deleteQueue"];
+    };
+    readonly scheduleColor: {
+        list: HiveClient["getScheduleColors"];
+        get: HiveClient["getScheduleColor"];
+        create: HiveClient["createScheduleColor"];
+        update: HiveClient["updateScheduleColor"];
+        patch: HiveClient["patchScheduleColor"];
+        delete: HiveClient["deleteScheduleColor"];
+    };
+    readonly scheduleEvent: {
+        list: HiveClient["getScheduleEvents"];
+        get: HiveClient["getScheduleEvent"];
+        create: HiveClient["createScheduleEvent"];
+        update: HiveClient["updateScheduleEvent"];
+        patch: HiveClient["patchScheduleEvent"];
+        delete: HiveClient["deleteScheduleEvent"];
+    };
+    readonly scheduleKiosk: {
+        list: HiveClient["getScheduleKiosks"];
+        get: HiveClient["getScheduleKiosk"];
+        create: HiveClient["createScheduleKiosk"];
+        update: HiveClient["updateScheduleKiosk"];
+        patch: HiveClient["patchScheduleKiosk"];
+        delete: HiveClient["deleteScheduleKiosk"];
+    };
+    readonly lessonRule: {
+        list: HiveClient["getLessonRules"];
+        get: HiveClient["getLessonRule"];
+        create: HiveClient["createLessonRule"];
+        update: HiveClient["updateLessonRule"];
+        patch: HiveClient["patchLessonRule"];
+        delete: HiveClient["deleteLessonRule"];
+    };
+    readonly ssoApplication: {
+        list: HiveClient["getSsoApplications"];
+        get: HiveClient["getSsoApplication"];
+        create: HiveClient["createSsoApplication"];
+        update: HiveClient["updateSsoApplication"];
+        patch: HiveClient["patchSsoApplication"];
+        delete: HiveClient["deleteSsoApplication"];
+    };
+    readonly tag: {
+        list: HiveClient["getTags"];
+        get: HiveClient["getTag"];
+        create: HiveClient["createTag"];
+        update: HiveClient["updateTag"];
+        patch: HiveClient["patchTag"];
+        delete: HiveClient["deleteTag"];
+    };
+    readonly seating: {
+        list: HiveClient["getSeatings"];
+        get: HiveClient["getSeating"];
+        create: HiveClient["createSeating"];
+        update: HiveClient["updateSeating"];
+        patch: HiveClient["patchSeating"];
+        delete: HiveClient["deleteSeating"];
+    };
+    readonly lesson: {
+        list: HiveClient["getLessons"];
+        get: HiveClient["getLesson"];
+        create: HiveClient["createLesson"];
+        update: HiveClient["updateLesson"];
+        patch: HiveClient["patchLesson"];
+        delete: HiveClient["deleteLesson"];
+        setForClass: HiveClient["setLessonForClass"];
+    };
+    readonly class: {
+        list: HiveClient["getClasses"];
+    };
+    readonly user: {
+        list: HiveClient["getUsers"];
+        register: HiveClient["registerCourseUser"];
+    };
+    readonly me: {
+        get: HiveClient["getMe"];
+        patch: HiveClient["patchMe"];
+        checkIn: HiveClient["checkIn"];
+    };
+
     constructor(
         accessToken: string,
         refreshToken?: string,
@@ -46,6 +250,164 @@ export class HiveClient {
         // specific instance, falling back to the default env URL.
         this.hiveBaseUrl =
             hiveBaseUrl ?? process.env.NEXT_PUBLIC_HIVE_URL ?? "";
+
+        this.assignment = {
+            list: this.getAssignments.bind(this),
+            get: this.getAssignment.bind(this),
+            create: this.createAssignment.bind(this),
+            update: this.updateAssignment.bind(this),
+            patch: this.patchAssignment.bind(this),
+            delete: this.deleteAssignment.bind(this),
+        };
+        this.assignmentResponse = {
+            list: this.getAssignmentResponses.bind(this),
+            get: this.getAssignmentResponse.bind(this),
+            create: this.createAssignmentResponse.bind(this),
+            update: this.updateAssignmentResponse.bind(this),
+            patch: this.patchAssignmentResponse.bind(this),
+            delete: this.deleteAssignmentResponse.bind(this),
+        };
+        this.exercise = {
+            list: this.getExercises.bind(this),
+            get: this.getExercise.bind(this),
+            create: this.createExercise.bind(this),
+            update: this.updateExercise.bind(this),
+            patch: this.patchExercise.bind(this),
+            delete: this.deleteExercise.bind(this),
+        };
+        this.program = {
+            list: this.getPrograms.bind(this),
+            get: this.getProgram.bind(this),
+            create: this.createProgram.bind(this),
+            update: this.updateProgram.bind(this),
+            patch: this.patchProgram.bind(this),
+            delete: this.deleteProgram.bind(this),
+        };
+        this.subject = {
+            list: this.getSubjects.bind(this),
+            get: this.getSubject.bind(this),
+            create: this.createSubject.bind(this),
+            update: this.updateSubject.bind(this),
+            patch: this.patchSubject.bind(this),
+            delete: this.deleteSubject.bind(this),
+        };
+        this.module = {
+            list: this.getModules.bind(this),
+            get: this.getModule.bind(this),
+            create: this.createModule.bind(this),
+            update: this.updateModule.bind(this),
+            patch: this.patchModule.bind(this),
+            delete: this.deleteModule.bind(this),
+        };
+        this.help = {
+            list: this.getHelps.bind(this),
+            get: this.getHelp.bind(this),
+            create: this.createHelp.bind(this),
+            update: this.updateHelp.bind(this),
+            patch: this.patchHelp.bind(this),
+            delete: this.deleteHelp.bind(this),
+        };
+        this.helpResponse = {
+            list: this.getHelpResponses.bind(this),
+            get: this.getHelpResponse.bind(this),
+            create: this.createHelpResponse.bind(this),
+            update: this.updateHelpResponse.bind(this),
+            patch: this.patchHelpResponse.bind(this),
+            delete: this.deleteHelpResponse.bind(this),
+        };
+        this.notification = {
+            list: this.getNotifications.bind(this),
+            get: this.getNotification.bind(this),
+            create: this.createNotification.bind(this),
+            update: this.updateNotification.bind(this),
+            patch: this.patchNotification.bind(this),
+            delete: this.deleteNotification.bind(this),
+        };
+        this.queue = {
+            list: this.getQueues.bind(this),
+            get: this.getQueue.bind(this),
+            create: this.createQueue.bind(this),
+            update: this.updateQueue.bind(this),
+            patch: this.patchQueue.bind(this),
+            delete: this.deleteQueue.bind(this),
+        };
+        this.scheduleColor = {
+            list: this.getScheduleColors.bind(this),
+            get: this.getScheduleColor.bind(this),
+            create: this.createScheduleColor.bind(this),
+            update: this.updateScheduleColor.bind(this),
+            patch: this.patchScheduleColor.bind(this),
+            delete: this.deleteScheduleColor.bind(this),
+        };
+        this.scheduleEvent = {
+            list: this.getScheduleEvents.bind(this),
+            get: this.getScheduleEvent.bind(this),
+            create: this.createScheduleEvent.bind(this),
+            update: this.updateScheduleEvent.bind(this),
+            patch: this.patchScheduleEvent.bind(this),
+            delete: this.deleteScheduleEvent.bind(this),
+        };
+        this.scheduleKiosk = {
+            list: this.getScheduleKiosks.bind(this),
+            get: this.getScheduleKiosk.bind(this),
+            create: this.createScheduleKiosk.bind(this),
+            update: this.updateScheduleKiosk.bind(this),
+            patch: this.patchScheduleKiosk.bind(this),
+            delete: this.deleteScheduleKiosk.bind(this),
+        };
+        this.lessonRule = {
+            list: this.getLessonRules.bind(this),
+            get: this.getLessonRule.bind(this),
+            create: this.createLessonRule.bind(this),
+            update: this.updateLessonRule.bind(this),
+            patch: this.patchLessonRule.bind(this),
+            delete: this.deleteLessonRule.bind(this),
+        };
+        this.ssoApplication = {
+            list: this.getSsoApplications.bind(this),
+            get: this.getSsoApplication.bind(this),
+            create: this.createSsoApplication.bind(this),
+            update: this.updateSsoApplication.bind(this),
+            patch: this.patchSsoApplication.bind(this),
+            delete: this.deleteSsoApplication.bind(this),
+        };
+        this.tag = {
+            list: this.getTags.bind(this),
+            get: this.getTag.bind(this),
+            create: this.createTag.bind(this),
+            update: this.updateTag.bind(this),
+            patch: this.patchTag.bind(this),
+            delete: this.deleteTag.bind(this),
+        };
+        this.seating = {
+            list: this.getSeatings.bind(this),
+            get: this.getSeating.bind(this),
+            create: this.createSeating.bind(this),
+            update: this.updateSeating.bind(this),
+            patch: this.patchSeating.bind(this),
+            delete: this.deleteSeating.bind(this),
+        };
+        this.lesson = {
+            list: this.getLessons.bind(this),
+            get: this.getLesson.bind(this),
+            create: this.createLesson.bind(this),
+            update: this.updateLesson.bind(this),
+            patch: this.patchLesson.bind(this),
+            delete: this.deleteLesson.bind(this),
+            setForClass: this.setLessonForClass.bind(this),
+        };
+        this.class = {
+            list: this.getClasses.bind(this),
+        };
+        this.user = {
+            list: this.getUsers.bind(this),
+            register: this.registerCourseUser.bind(this),
+        };
+        this.me = {
+            get: this.getMe.bind(this),
+            patch: this.patchMe.bind(this),
+            checkIn: this.checkIn.bind(this),
+        };
     }
 
     protected buildUrl(path: string): string {
@@ -201,5 +563,794 @@ export class HiveClient {
             throw new HiveClientError("תגובת הייב לעזרות פתוחות לא תקינה");
         }
         return count;
+    }
+
+    async getMe(): Promise<CourseUser> {
+        return await this._get<CourseUser>(this.buildUrl("/api/core/management/users/me/"));
+    }
+
+    async patchMe(data: PatchedMeRequest): Promise<CourseUser> {
+        return await this._request<CourseUser>(
+            this.buildUrl("/api/core/management/users/me/"),
+            "PATCH",
+            data,
+        );
+    }
+
+    async checkIn(): Promise<Record<string, unknown>> {
+        return await this._request<Record<string, unknown>>(
+            this.buildUrl("/api/core/management/users/check_in/"),
+            "PUT",
+        );
+    }
+
+    async registerCourseUser(data: RegisterCourseUserRequest): Promise<RegisterCourseUser> {
+        return await this._request<RegisterCourseUser>(
+            this.buildUrl("/api/core/management/register/"),
+            "POST",
+            data,
+        );
+    }
+
+    async getSsoClientInfo(clientId: string): Promise<SsoClientInfo> {
+        const params = new URLSearchParams({ client_id: clientId });
+        return await this._get<SsoClientInfo>(
+            this.buildUrl(`/api/core/sso/client-info/?${params.toString()}`),
+        );
+    }
+
+    async getServerTime(): Promise<string> {
+        return await this._get<string>(this.buildUrl("/api/core/time/"));
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
+    async getAssignments(params?: Record<string, any>): Promise<Array<Assignment>> {
+        const queryString = new URLSearchParams(params).toString();
+        return await this._get<Array<Assignment>>(
+            this.buildUrl(`/api/core/assignments/?${queryString}`),
+        );
+    }
+
+    async getAssignment(id: number): Promise<Assignment> {
+        return await this._get<Assignment>(this.buildUrl(`/api/core/assignments/${id}/`));
+    }
+
+    async createAssignment(data: AssignmentRequest): Promise<Assignment> {
+        return await this._request<Assignment>(
+            this.buildUrl("/api/core/assignments/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateAssignment(id: number, data: AssignmentRequest): Promise<Assignment> {
+        return await this._request<Assignment>(
+            this.buildUrl(`/api/core/assignments/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchAssignment(id: number, data: Partial<AssignmentRequest>): Promise<Assignment> {
+        return await this._request<Assignment>(
+            this.buildUrl(`/api/core/assignments/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteAssignment(id: number): Promise<void> {
+        return await this._request<void>(this.buildUrl(`/api/core/assignments/${id}/`), "DELETE");
+    }
+
+    /** A student's submissions/comments on an assignment. */
+    async getAssignmentResponses(parentId: number): Promise<Array<AssignmentResponse>> {
+        return await this._get<Array<AssignmentResponse>>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/`),
+        );
+    }
+
+    async getAssignmentResponse(parentId: number, id: number): Promise<AssignmentResponse> {
+        return await this._get<AssignmentResponse>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/${id}/`),
+        );
+    }
+
+    async createAssignmentResponse(
+        parentId: number,
+        data: AssignmentResponseRequest,
+    ): Promise<AssignmentResponse> {
+        return await this._request<AssignmentResponse>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/`),
+            "POST",
+            data,
+        );
+    }
+
+    async updateAssignmentResponse(
+        parentId: number,
+        id: number,
+        data: AssignmentResponseRequest,
+    ): Promise<AssignmentResponse> {
+        return await this._request<AssignmentResponse>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchAssignmentResponse(
+        parentId: number,
+        id: number,
+        data: Partial<AssignmentResponseRequest>,
+    ): Promise<AssignmentResponse> {
+        return await this._request<AssignmentResponse>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteAssignmentResponse(parentId: number, id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/assignments/${parentId}/responses/${id}/`),
+            "DELETE",
+        );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
+    async getExercises(params?: Record<string, any>): Promise<Array<Exercise>> {
+        const queryString = new URLSearchParams(params).toString();
+        return await this._get<Array<Exercise>>(
+            this.buildUrl(`/api/core/course/exercises/?${queryString}`),
+        );
+    }
+
+    async getExercise(id: number): Promise<Exercise> {
+        return await this._get<Exercise>(this.buildUrl(`/api/core/course/exercises/${id}/`));
+    }
+
+    async createExercise(data: ExerciseRequest): Promise<Exercise> {
+        return await this._request<Exercise>(
+            this.buildUrl("/api/core/course/exercises/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateExercise(id: number, data: ExerciseRequest): Promise<Exercise> {
+        return await this._request<Exercise>(
+            this.buildUrl(`/api/core/course/exercises/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchExercise(id: number, data: Partial<ExerciseRequest>): Promise<Exercise> {
+        return await this._request<Exercise>(
+            this.buildUrl(`/api/core/course/exercises/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteExercise(id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/course/exercises/${id}/`),
+            "DELETE",
+        );
+    }
+
+    async getPrograms(): Promise<Array<Program>> {
+        return await this._get<Array<Program>>(this.buildUrl("/api/core/course/programs/"));
+    }
+
+    async getProgram(id: number): Promise<Program> {
+        return await this._get<Program>(this.buildUrl(`/api/core/course/programs/${id}/`));
+    }
+
+    async createProgram(data: ProgramRequest): Promise<Program> {
+        return await this._request<Program>(
+            this.buildUrl("/api/core/course/programs/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateProgram(id: number, data: ProgramRequest): Promise<Program> {
+        return await this._request<Program>(
+            this.buildUrl(`/api/core/course/programs/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchProgram(id: number, data: Partial<ProgramRequest>): Promise<Program> {
+        return await this._request<Program>(
+            this.buildUrl(`/api/core/course/programs/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteProgram(id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/course/programs/${id}/`),
+            "DELETE",
+        );
+    }
+
+    async getSubjects(): Promise<Array<Subject>> {
+        return await this._get<Array<Subject>>(this.buildUrl("/api/core/course/subjects/"));
+    }
+
+    async getSubject(id: number): Promise<Subject> {
+        return await this._get<Subject>(this.buildUrl(`/api/core/course/subjects/${id}/`));
+    }
+
+    async createSubject(data: SubjectRequest): Promise<Subject> {
+        return await this._request<Subject>(
+            this.buildUrl("/api/core/course/subjects/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateSubject(id: number, data: SubjectRequest): Promise<Subject> {
+        return await this._request<Subject>(
+            this.buildUrl(`/api/core/course/subjects/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchSubject(id: number, data: Partial<SubjectRequest>): Promise<Subject> {
+        return await this._request<Subject>(
+            this.buildUrl(`/api/core/course/subjects/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteSubject(id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/course/subjects/${id}/`),
+            "DELETE",
+        );
+    }
+
+    async getModules(): Promise<Array<Module>> {
+        return await this._get<Array<Module>>(this.buildUrl("/api/core/course/modules/"));
+    }
+
+    async getModule(id: number): Promise<Module> {
+        return await this._get<Module>(this.buildUrl(`/api/core/course/modules/${id}/`));
+    }
+
+    async createModule(data: ModuleRequest): Promise<Module> {
+        return await this._request<Module>(
+            this.buildUrl("/api/core/course/modules/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateModule(id: number, data: ModuleRequest): Promise<Module> {
+        return await this._request<Module>(
+            this.buildUrl(`/api/core/course/modules/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchModule(id: number, data: Partial<ModuleRequest>): Promise<Module> {
+        return await this._request<Module>(
+            this.buildUrl(`/api/core/course/modules/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteModule(id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/course/modules/${id}/`),
+            "DELETE",
+        );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
+    async getHelps(params?: Record<string, any>): Promise<Array<Help>> {
+        const queryString = new URLSearchParams(params).toString();
+        return await this._get<Array<Help>>(this.buildUrl(`/api/core/help/?${queryString}`));
+    }
+
+    async getHelp(id: number): Promise<Help> {
+        return await this._get<Help>(this.buildUrl(`/api/core/help/${id}/`));
+    }
+
+    async createHelp(data: HelpRequest): Promise<Help> {
+        return await this._request<Help>(this.buildUrl("/api/core/help/"), "POST", data);
+    }
+
+    async updateHelp(id: number, data: HelpRequest): Promise<Help> {
+        return await this._request<Help>(this.buildUrl(`/api/core/help/${id}/`), "PUT", data);
+    }
+
+    async patchHelp(id: number, data: Partial<HelpRequest>): Promise<Help> {
+        return await this._request<Help>(this.buildUrl(`/api/core/help/${id}/`), "PATCH", data);
+    }
+
+    async deleteHelp(id: number): Promise<void> {
+        return await this._request<void>(this.buildUrl(`/api/core/help/${id}/`), "DELETE");
+    }
+
+    /** Replies on a help ticket. */
+    async getHelpResponses(parentId: number): Promise<Array<HelpResponse>> {
+        return await this._get<Array<HelpResponse>>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/`),
+        );
+    }
+
+    async getHelpResponse(parentId: number, id: number): Promise<HelpResponse> {
+        return await this._get<HelpResponse>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/${id}/`),
+        );
+    }
+
+    async createHelpResponse(
+        parentId: number,
+        data: HelpResponseRequest,
+    ): Promise<HelpResponse> {
+        return await this._request<HelpResponse>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/`),
+            "POST",
+            data,
+        );
+    }
+
+    async updateHelpResponse(
+        parentId: number,
+        id: number,
+        data: HelpResponseRequest,
+    ): Promise<HelpResponse> {
+        return await this._request<HelpResponse>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchHelpResponse(
+        parentId: number,
+        id: number,
+        data: Partial<HelpResponseRequest>,
+    ): Promise<HelpResponse> {
+        return await this._request<HelpResponse>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteHelpResponse(parentId: number, id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/help/${parentId}/responses/${id}/`),
+            "DELETE",
+        );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
+    async getNotifications(params?: Record<string, any>): Promise<Array<Notification>> {
+        const queryString = new URLSearchParams(params).toString();
+        return await this._get<Array<Notification>>(
+            this.buildUrl(`/api/core/notification/?${queryString}`),
+        );
+    }
+
+    async getNotification(id: number): Promise<Notification> {
+        return await this._get<Notification>(this.buildUrl(`/api/core/notification/${id}/`));
+    }
+
+    async createNotification(data: NotificationRequest): Promise<Notification> {
+        return await this._request<Notification>(
+            this.buildUrl("/api/core/notification/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateNotification(id: number, data: NotificationRequest): Promise<Notification> {
+        return await this._request<Notification>(
+            this.buildUrl(`/api/core/notification/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchNotification(
+        id: number,
+        data: Partial<NotificationRequest>,
+    ): Promise<Notification> {
+        return await this._request<Notification>(
+            this.buildUrl(`/api/core/notification/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteNotification(id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/notification/${id}/`),
+            "DELETE",
+        );
+    }
+
+    async getQueues(): Promise<Array<Queue>> {
+        return await this._get<Array<Queue>>(this.buildUrl("/api/core/queues/"));
+    }
+
+    async getQueue(id: number): Promise<Queue> {
+        return await this._get<Queue>(this.buildUrl(`/api/core/queues/${id}/`));
+    }
+
+    async createQueue(data: QueueRequest): Promise<Queue> {
+        return await this._request<Queue>(this.buildUrl("/api/core/queues/"), "POST", data);
+    }
+
+    async updateQueue(id: number, data: QueueRequest): Promise<Queue> {
+        return await this._request<Queue>(this.buildUrl(`/api/core/queues/${id}/`), "PUT", data);
+    }
+
+    async patchQueue(id: number, data: Partial<QueueRequest>): Promise<Queue> {
+        return await this._request<Queue>(
+            this.buildUrl(`/api/core/queues/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteQueue(id: number): Promise<void> {
+        return await this._request<void>(this.buildUrl(`/api/core/queues/${id}/`), "DELETE");
+    }
+
+    async getScheduleColors(): Promise<Array<ScheduleColor>> {
+        return await this._get<Array<ScheduleColor>>(this.buildUrl("/api/core/schedule/colors/"));
+    }
+
+    async getScheduleColor(id: number): Promise<ScheduleColor> {
+        return await this._get<ScheduleColor>(this.buildUrl(`/api/core/schedule/colors/${id}/`));
+    }
+
+    async createScheduleColor(data: ScheduleColorRequest): Promise<ScheduleColor> {
+        return await this._request<ScheduleColor>(
+            this.buildUrl("/api/core/schedule/colors/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateScheduleColor(id: number, data: ScheduleColorRequest): Promise<ScheduleColor> {
+        return await this._request<ScheduleColor>(
+            this.buildUrl(`/api/core/schedule/colors/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchScheduleColor(
+        id: number,
+        data: Partial<ScheduleColorRequest>,
+    ): Promise<ScheduleColor> {
+        return await this._request<ScheduleColor>(
+            this.buildUrl(`/api/core/schedule/colors/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteScheduleColor(id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/schedule/colors/${id}/`),
+            "DELETE",
+        );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
+    async getScheduleEvents(params?: Record<string, any>): Promise<Array<ScheduleEvent>> {
+        const queryString = new URLSearchParams(params).toString();
+        return await this._get<Array<ScheduleEvent>>(
+            this.buildUrl(`/api/core/schedule/events/?${queryString}`),
+        );
+    }
+
+    async getScheduleEvent(id: number): Promise<ScheduleEvent> {
+        return await this._get<ScheduleEvent>(this.buildUrl(`/api/core/schedule/events/${id}/`));
+    }
+
+    async createScheduleEvent(data: ScheduleEventRequest): Promise<ScheduleEvent> {
+        return await this._request<ScheduleEvent>(
+            this.buildUrl("/api/core/schedule/events/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateScheduleEvent(id: number, data: ScheduleEventRequest): Promise<ScheduleEvent> {
+        return await this._request<ScheduleEvent>(
+            this.buildUrl(`/api/core/schedule/events/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchScheduleEvent(
+        id: number,
+        data: Partial<ScheduleEventRequest>,
+    ): Promise<ScheduleEvent> {
+        return await this._request<ScheduleEvent>(
+            this.buildUrl(`/api/core/schedule/events/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteScheduleEvent(id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/schedule/events/${id}/`),
+            "DELETE",
+        );
+    }
+
+    async getScheduleKiosks(): Promise<Array<ScheduleKiosk>> {
+        return await this._get<Array<ScheduleKiosk>>(this.buildUrl("/api/core/schedule/kiosk/"));
+    }
+
+    async getScheduleKiosk(id: number): Promise<ScheduleKiosk> {
+        return await this._get<ScheduleKiosk>(this.buildUrl(`/api/core/schedule/kiosk/${id}/`));
+    }
+
+    async createScheduleKiosk(data: ScheduleKioskRequest): Promise<ScheduleKiosk> {
+        return await this._request<ScheduleKiosk>(
+            this.buildUrl("/api/core/schedule/kiosk/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateScheduleKiosk(id: number, data: ScheduleKioskRequest): Promise<ScheduleKiosk> {
+        return await this._request<ScheduleKiosk>(
+            this.buildUrl(`/api/core/schedule/kiosk/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchScheduleKiosk(
+        id: number,
+        data: Partial<ScheduleKioskRequest>,
+    ): Promise<ScheduleKiosk> {
+        return await this._request<ScheduleKiosk>(
+            this.buildUrl(`/api/core/schedule/kiosk/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteScheduleKiosk(id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/schedule/kiosk/${id}/`),
+            "DELETE",
+        );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- URLSearchParams coerces values; callers pass enums/arrays
+    async getLessons(params?: Record<string, any>): Promise<Array<Lesson>> {
+        const queryString = new URLSearchParams(params).toString();
+        return await this._get<Array<Lesson>>(
+            this.buildUrl(`/api/core/schedule/lessons/?${queryString}`),
+        );
+    }
+
+    async getLesson(id: number): Promise<Lesson> {
+        return await this._get<Lesson>(this.buildUrl(`/api/core/schedule/lessons/${id}/`));
+    }
+
+    async createLesson(data: LessonRequest): Promise<Lesson> {
+        return await this._request<Lesson>(
+            this.buildUrl("/api/core/schedule/lessons/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateLesson(id: number, data: LessonRequest): Promise<Lesson> {
+        return await this._request<Lesson>(
+            this.buildUrl(`/api/core/schedule/lessons/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchLesson(id: number, data: Partial<LessonRequest>): Promise<Lesson> {
+        return await this._request<Lesson>(
+            this.buildUrl(`/api/core/schedule/lessons/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteLesson(id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/schedule/lessons/${id}/`),
+            "DELETE",
+        );
+    }
+
+    async setLessonForClass(classId: number, lessonId: null | number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/management/classes/${classId}/lesson/`),
+            "POST",
+            { lesson: lessonId },
+        );
+    }
+
+    async getLessonRules(parentId: number): Promise<Array<LessonRule>> {
+        return await this._request<Array<LessonRule>>(
+            this.buildUrl(`/api/core/schedule/lessons/${parentId}/rules/`),
+            "GET",
+        );
+    }
+
+    async getLessonRule(parentId: number, id: number): Promise<LessonRule> {
+        return await this._request<LessonRule>(
+            this.buildUrl(`/api/core/schedule/lessons/${parentId}/rules/${id}/`),
+            "GET",
+        );
+    }
+
+    async createLessonRule(parentId: number, data: LessonRuleRequest): Promise<LessonRule> {
+        return await this._request<LessonRule>(
+            this.buildUrl(`/api/core/schedule/lessons/${parentId}/rules/`),
+            "POST",
+            data,
+        );
+    }
+
+    async updateLessonRule(
+        parentId: number,
+        id: number,
+        data: LessonRuleRequest,
+    ): Promise<LessonRule> {
+        return await this._request<LessonRule>(
+            this.buildUrl(`/api/core/schedule/lessons/${parentId}/rules/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchLessonRule(
+        parentId: number,
+        id: number,
+        data: Partial<LessonRuleRequest>,
+    ): Promise<LessonRule> {
+        return await this._request<LessonRule>(
+            this.buildUrl(`/api/core/schedule/lessons/${parentId}/rules/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteLessonRule(parentId: number, id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/schedule/lessons/${parentId}/rules/${id}/`),
+            "DELETE",
+        );
+    }
+
+    async getSsoApplications(): Promise<Array<SsoApplication>> {
+        return await this._get<Array<SsoApplication>>(this.buildUrl("/api/core/sso/applications/"));
+    }
+
+    async getSsoApplication(id: number): Promise<SsoApplication> {
+        return await this._get<SsoApplication>(
+            this.buildUrl(`/api/core/sso/applications/${id}/`),
+        );
+    }
+
+    async createSsoApplication(data: SsoApplicationRequest): Promise<SsoApplication> {
+        return await this._request<SsoApplication>(
+            this.buildUrl("/api/core/sso/applications/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateSsoApplication(id: number, data: SsoApplicationRequest): Promise<SsoApplication> {
+        return await this._request<SsoApplication>(
+            this.buildUrl(`/api/core/sso/applications/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchSsoApplication(
+        id: number,
+        data: Partial<SsoApplicationRequest>,
+    ): Promise<SsoApplication> {
+        return await this._request<SsoApplication>(
+            this.buildUrl(`/api/core/sso/applications/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteSsoApplication(id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/sso/applications/${id}/`),
+            "DELETE",
+        );
+    }
+
+    async getTags(): Promise<Array<Tag>> {
+        return await this._get<Array<Tag>>(this.buildUrl("/api/core/tags/"));
+    }
+
+    async getTag(id: number): Promise<Tag> {
+        return await this._get<Tag>(this.buildUrl(`/api/core/tags/${id}/`));
+    }
+
+    async createTag(data: TagRequest): Promise<Tag> {
+        return await this._request<Tag>(this.buildUrl("/api/core/tags/"), "POST", data);
+    }
+
+    async updateTag(id: number, data: TagRequest): Promise<Tag> {
+        return await this._request<Tag>(this.buildUrl(`/api/core/tags/${id}/`), "PUT", data);
+    }
+
+    async patchTag(id: number, data: Partial<TagRequest>): Promise<Tag> {
+        return await this._request<Tag>(this.buildUrl(`/api/core/tags/${id}/`), "PATCH", data);
+    }
+
+    async deleteTag(id: number): Promise<void> {
+        return await this._request<void>(this.buildUrl(`/api/core/tags/${id}/`), "DELETE");
+    }
+
+    async getSeatings(): Promise<Array<Seating>> {
+        return await this._get<Array<Seating>>(this.buildUrl("/api/core/management/seating/"));
+    }
+
+    async getSeating(id: number): Promise<Seating> {
+        return await this._get<Seating>(this.buildUrl(`/api/core/management/seating/${id}/`));
+    }
+
+    async createSeating(data: SeatingRequest): Promise<Seating> {
+        return await this._request<Seating>(
+            this.buildUrl("/api/core/management/seating/"),
+            "POST",
+            data,
+        );
+    }
+
+    async updateSeating(id: number, data: SeatingRequest): Promise<Seating> {
+        return await this._request<Seating>(
+            this.buildUrl(`/api/core/management/seating/${id}/`),
+            "PUT",
+            data,
+        );
+    }
+
+    async patchSeating(id: number, data: Partial<SeatingRequest>): Promise<Seating> {
+        return await this._request<Seating>(
+            this.buildUrl(`/api/core/management/seating/${id}/`),
+            "PATCH",
+            data,
+        );
+    }
+
+    async deleteSeating(id: number): Promise<void> {
+        return await this._request<void>(
+            this.buildUrl(`/api/core/management/seating/${id}/`),
+            "DELETE",
+        );
     }
 }

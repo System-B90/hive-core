@@ -1,0 +1,76 @@
+name: Integration Tests
+
+on:
+    workflow_dispatch:
+    pull_request:
+        branches: [master]
+    push:
+        branches: [master]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    hive-client-integration:
+        name: HiveClient vs real Hive
+        runs-on: ubuntu-24.04
+        timeout-minutes: 45
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v7
+
+            # Shared org action: disk cleanup, boot + init, readiness check.
+            # Same action Bluz/Peek-a-boo/Madash use for E2E.
+            # image-source: registry pulls pyhive's nightly-built images
+            # (ghcr.io/system-b90/hive/*) and reads docker-compose.yaml/.env
+            # from pyhive's hive-stack/ directory — no Hive checkout. pyhive
+            # is itself private, and GITHUB_TOKEN can't read across repos
+            # even within the same org, so hive-token is still needed here
+            # (just a much lower-privilege PAT than build mode's Hive-repo
+            # clone would need). The action's own registry-prefix default
+            # (ghcr.io/system-b15/hive) is stale post-rebrand, so it's pinned
+            # here explicitly; registry-tag is left unset so it defaults to
+            # the exact HIVE_SHA hive-stack/ recorded at publish time.
+            - name: Set up Hive
+              uses: System-B90/.github/actions/setup-hive@main
+              with:
+                  python-version: "3.13"
+                  image-source: registry
+                  registry-prefix: ghcr.io/system-b90/hive
+                  hive-token: ${{ secrets.SYSTEM_B90_READ }}
+
+            - name: Set up Node
+              uses: actions/setup-node@v5
+              with:
+                  node-version: "22"
+
+            - name: Install dependencies
+              run: npm ci
+
+            # Hive's nginx serves the sample self-signed cert setup-hive maps
+            # to hive.org — same relaxation the other consumer repos' E2E
+            # workflows use to talk to it.
+            - name: Run integration tests against real Hive
+              run: npm test
+              env:
+                  NODE_TLS_REJECT_UNAUTHORIZED: "0"
+                  HIVE_TEST_URL: https://hive.org
+
+            - name: Dump Hive container logs
+              if: failure()
+              run: |
+                  mkdir -p container-logs
+                  for c in $(docker ps -aq); do
+                    name=$(docker inspect --format '{{.Name}}' "$c" | tr -d '/')
+                    docker logs "$c" > "container-logs/$name.log" 2>&1 || true
+                  done
+
+            - name: Upload Hive container logs
+              uses: actions/upload-artifact@v6
+              if: failure()
+              with:
+                  name: hive-container-logs
+                  path: container-logs/
+                  retention-days: 7
