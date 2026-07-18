@@ -25,23 +25,21 @@ jobs:
             # Same action Bluz/Peek-a-boo/Madash use for E2E.
             # image-source: registry pulls pyhive's nightly-built images
             # (ghcr.io/system-b90/hive/*) and reads docker-compose.yaml/.env
-            # from pyhive's public hive-stack/ directory — no Hive checkout,
-            # no PAT needed at all. The action's own registry-prefix default
+            # from pyhive's hive-stack/ directory — no Hive checkout. pyhive
+            # is itself private, and GITHUB_TOKEN can't read across repos
+            # even within the same org, so hive-token is still needed here
+            # (just a much lower-privilege PAT than build mode's Hive-repo
+            # clone would need). The action's own registry-prefix default
             # (ghcr.io/system-b15/hive) is stale post-rebrand, so it's pinned
             # here explicitly; registry-tag is left unset so it defaults to
             # the exact HIVE_SHA hive-stack/ recorded at publish time.
-            #
-            # Requires System-B90/.github#<companion-PR> (setup-hive: make
-            # hive-token optional, read config from pyhive's hive-stack/ in
-            # registry mode) and System-B90/pyhive#8 (export hive-stack/) to
-            # both be merged first — until then this step fails with "no
-            # hive-stack/docker-compose.yaml found".
             - name: Set up Hive
               uses: System-B90/.github/actions/setup-hive@main
               with:
                   python-version: "3.13"
                   image-source: registry
                   registry-prefix: ghcr.io/system-b90/hive
+                  hive-token: ${{ secrets.SYSTEM_B90_READ }}
 
             - name: Set up Node
               uses: actions/setup-node@v5
