@@ -71,7 +71,8 @@ describe("HiveClient integration (real Hive)", () => {
         const me = await client.me.get();
 
         const program = await client.program.create({
-            name: `integration-test-program-${Date.now()}`,
+            // Program.name rejects hyphens server-side (alnum + spaces only).
+            name: `integration test program ${Date.now()}`,
             checker: me.id,
         });
         try {
