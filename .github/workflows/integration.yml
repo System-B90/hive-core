@@ -14,37 +14,36 @@ concurrency:
 jobs:
     hive-client-integration:
         name: HiveClient vs real Hive
-        runs-on: ubuntu-24.04
+        runs-on: self-hosted
         timeout-minutes: 45
 
         steps:
             - name: Checkout repository
               uses: actions/checkout@v7
 
-            # Shared org action: disk cleanup, boot + init, readiness check.
-            # Same action Bluz/Peek-a-boo/Madash use for E2E.
+            # Shared org action: stale-stack teardown, boot + init, readiness
+            # check. Same action Bluz/Peek-a-boo/Madash use for E2E.
             # image-source: registry pulls pyhive's nightly-built images
             # (ghcr.io/system-b90/hive/*) and reads docker-compose.yaml/.env
             # from pyhive's hive-stack/ directory — no Hive checkout. pyhive
             # is itself private, and GITHUB_TOKEN can't read across repos
             # even within the same org, so hive-token is still needed here
             # (just a much lower-privilege PAT than build mode's Hive-repo
-            # clone would need). The action's own registry-prefix default
-            # (ghcr.io/system-b15/hive) is stale post-rebrand, so it's pinned
-            # here explicitly; registry-tag is left unset so it defaults to
+            # clone would need). registry-prefix is left unset — the action's
+            # default is ghcr.io/system-b90/hive, and registry-tag defaults to
             # the exact HIVE_SHA hive-stack/ recorded at publish time.
             - name: Set up Hive
               uses: System-B90/.github/actions/setup-hive@main
               with:
                   python-version: "3.13"
                   image-source: registry
-                  registry-prefix: ghcr.io/system-b90/hive
                   hive-token: ${{ secrets.SYSTEM_B90_READ }}
 
             - name: Set up Node
-              uses: actions/setup-node@v5
+              uses: actions/setup-node@v6
               with:
                   node-version: "22"
+                  cache: npm
 
             - name: Install dependencies
               run: npm ci
