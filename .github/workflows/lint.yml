@@ -14,7 +14,7 @@ concurrency:
 jobs:
     lint:
         name: ESLint + typecheck
-        runs-on: ubuntu-24.04
+        runs-on: self-hosted
         timeout-minutes: 10
 
         steps:
