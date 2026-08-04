@@ -14,7 +14,7 @@ concurrency:
 jobs:
     lint:
         name: ESLint + typecheck
-        runs-on: self-hosted
+        runs-on: [self-hosted, node]
         timeout-minutes: 10
 
         steps:
