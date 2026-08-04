@@ -16,7 +16,7 @@ jobs:
         name: HiveClient vs real Hive
         # The org is out of GitHub-hosted Actions minutes — everything runs on
         # the self-hosted pool.
-        runs-on: self-hosted
+        runs-on: [self-hosted, dind]
         timeout-minutes: 45
 
         steps:
