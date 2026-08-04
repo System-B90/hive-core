@@ -14,12 +14,15 @@ concurrency:
 jobs:
     hive-client-integration:
         name: HiveClient vs real Hive
-        runs-on: ubuntu-24.04
+        # The org is out of GitHub-hosted Actions minutes — everything runs on
+        # the self-hosted pool.
+        runs-on: self-hosted
         timeout-minutes: 45
 
         steps:
             - name: Checkout repository
               uses: actions/checkout@v7
+
 
             # Shared org action: disk cleanup, boot + init, readiness check.
             # Same action Bluz/Peek-a-boo/Madash use for E2E.
@@ -74,3 +77,24 @@ jobs:
                   name: hive-container-logs
                   path: container-logs/
                   retention-days: 7
+
+            # ── Release the shared box ─────────────────────────────────────
+            # Runs even when the tests fail: otherwise a dead Hive stack
+            # occupies the shared runner until the next job happens to clear it
+            # (System-B90/.github#12). Best-effort throughout — cleanup must not
+            # turn a green run red.
+            - name: Tear down Hive and reclaim disk
+              if: always()
+              run: |
+                  # Best-effort: GitHub runs this under `bash -e`, where a bare
+                  # command substitution from a dead docker daemon would abort the
+                  # step before `exit 0`. Cleanup must never fail the job.
+                  set +e
+                  docker compose -f hive/docker-compose.yaml down -v --remove-orphans || true
+                  leftovers=$(docker ps -aq --filter "name=^/hive-")
+                  if [ -n "$leftovers" ]; then docker rm -f $leftovers || true; fi
+                  docker container prune -f || true
+                  docker volume prune -f || true
+                  docker builder prune -f --keep-storage 10GB || true
+                  df -h / || true
+                  exit 0
