@@ -14,7 +14,7 @@ concurrency:
 jobs:
     lint:
         name: ESLint + typecheck
-        runs-on: ubuntu-24.04
+        runs-on: self-hosted
         timeout-minutes: 10
 
         steps:
@@ -22,9 +22,10 @@ jobs:
               uses: actions/checkout@v7
 
             - name: Set up Node
-              uses: actions/setup-node@v5
+              uses: actions/setup-node@v6
               with:
                   node-version: "22"
+                  cache: npm
 
             - name: Install dependencies
               run: npm ci
