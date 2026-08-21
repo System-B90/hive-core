@@ -986,8 +986,20 @@ export class HiveClient {
     }
 
     /** Queues; pass `{ module: <id> }` for just one module's queues. */
-    async getQueues(params?: Record<string, any>): Promise<Array<Queue>> {
-        const query = new URLSearchParams(params).toString();
+    async getQueues(
+        params?: Record<string, number | string>,
+    ): Promise<Array<Queue>> {
+        // URLSearchParams stringifies values itself, but only accepts a
+        // string-valued record in its typed signature — so map first rather
+        // than widening the parameter to `any`.
+        const query = params
+            ? new URLSearchParams(
+                  Object.entries(params).map(([key, value]) => [
+                      key,
+                      String(value),
+                  ]),
+              ).toString()
+            : "";
         return await this._get<Array<Queue>>(
             this.buildUrl(`/api/core/queues/${query ? `?${query}` : ""}`),
         );
