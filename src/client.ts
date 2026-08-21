@@ -985,8 +985,12 @@ export class HiveClient {
         );
     }
 
-    async getQueues(): Promise<Array<Queue>> {
-        return await this._get<Array<Queue>>(this.buildUrl("/api/core/queues/"));
+    /** Queues; pass `{ module: <id> }` for just one module's queues. */
+    async getQueues(params?: Record<string, any>): Promise<Array<Queue>> {
+        const query = new URLSearchParams(params).toString();
+        return await this._get<Array<Queue>>(
+            this.buildUrl(`/api/core/queues/${query ? `?${query}` : ""}`),
+        );
     }
 
     async getQueue(id: number): Promise<Queue> {
