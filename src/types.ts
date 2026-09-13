@@ -175,10 +175,21 @@ export type Queue = {
     readonly program_name: string;
 };
 
+/**
+ * A lesson id as Hive sends it. Some Hive instances moved lesson primary keys
+ * to UUID strings; treat it as opaque (path segment, key, equality only).
+ */
+export type LessonId = number | string;
+
+/**
+ * Hive renamed the lesson serializer's module foreign key to `module_id`;
+ * older instances still send `module`. Read it with `lessonModuleId`.
+ */
 export type Lesson = {
-    readonly id: number;
+    readonly id: LessonId;
     name: string;
     module: number;
+    module_id?: number;
     readonly module_order: string;
     readonly module_name: string;
     readonly subject_symbol: string;
@@ -195,6 +206,17 @@ export type LessonRule = {
     readonly queue_data: null | Queue;
     readonly student_groups_data: Array<Class> | null;
 };
+
+/**
+ * The module a lesson belongs to, whichever field the Hive instance uses.
+ * @param lesson A lesson as returned by Hive.
+ * @returns The module id, or undefined if the lesson carries neither field.
+ */
+export function lessonModuleId(
+    lesson: Lesson | undefined,
+): number | undefined {
+    return lesson?.module_id ?? lesson?.module;
+}
 
 export type ActionEnum = (typeof ActionEnum)[keyof typeof ActionEnum];
 
