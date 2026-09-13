@@ -5,7 +5,7 @@
  * `getOpenHelpsCount` folded in. Apps subclass this to add domain endpoints.
  */
 
-import { HiveClientError } from "./errors.js";
+import { HiveClientError, hiveFetch } from "./errors.js";
 import {
     Assignment,
     AssignmentResponse,
@@ -16,6 +16,7 @@ import {
     Help,
     HelpResponse,
     Lesson,
+    LessonId,
     LessonRule,
     Module,
     Notification,
@@ -72,6 +73,17 @@ export function isTimeoutError(e: unknown): e is TimeoutError {
         "name" in e.cause &&
         typeof (e.cause as Record<string, unknown>).name === "string"
     );
+}
+
+/**
+ * Hive's lesson serializer names the module foreign key `module_id`; older
+ * instances call it `module`. Sending both satisfies either one — DRF ignores
+ * the field it does not declare — so callers need not know which Hive it is.
+ */
+function withModuleId<T extends { module?: number }>(
+    data: T,
+): T & { module_id?: number } {
+    return data.module === undefined ? data : { ...data, module_id: data.module };
 }
 
 export type HttpMethod = "DELETE" | "GET" | "PATCH" | "POST" | "PUT";
@@ -419,7 +431,7 @@ export class HiveClient {
             throw new HiveClientError("אין טוקן רפרש זמין, נדרשת התחברות מחדש");
         }
 
-        const response = await fetch(
+        const response = await hiveFetch(
             this.buildUrl("/api/core/token/refresh/"),
             {
                 method: "POST",
@@ -451,7 +463,7 @@ export class HiveClient {
         isRetry = false,
         retryCount = 0,
     ): Promise<T> {
-        const response = await fetch(url, {
+        const response = await hiveFetch(url, {
             method,
             headers: {
                 Authorization: `Bearer ${this.accessToken}`,
@@ -514,7 +526,7 @@ export class HiveClient {
         const headers = new Headers(init.headers);
         headers.set("Cookie", `token=${this.accessToken}`);
 
-        const response = await fetch(url, {
+        const response = await hiveFetch(url, {
             ...init,
             headers,
         });
@@ -1167,7 +1179,7 @@ export class HiveClient {
         );
     }
 
-    async getLesson(id: number): Promise<Lesson> {
+    async getLesson(id: LessonId): Promise<Lesson> {
         return await this._get<Lesson>(this.buildUrl(`/api/core/schedule/lessons/${id}/`));
     }
 
@@ -1175,34 +1187,34 @@ export class HiveClient {
         return await this._request<Lesson>(
             this.buildUrl("/api/core/schedule/lessons/"),
             "POST",
-            data,
+            withModuleId(data),
         );
     }
 
-    async updateLesson(id: number, data: LessonRequest): Promise<Lesson> {
+    async updateLesson(id: LessonId, data: LessonRequest): Promise<Lesson> {
         return await this._request<Lesson>(
             this.buildUrl(`/api/core/schedule/lessons/${id}/`),
             "PUT",
-            data,
+            withModuleId(data),
         );
     }
 
-    async patchLesson(id: number, data: Partial<LessonRequest>): Promise<Lesson> {
+    async patchLesson(id: LessonId, data: Partial<LessonRequest>): Promise<Lesson> {
         return await this._request<Lesson>(
             this.buildUrl(`/api/core/schedule/lessons/${id}/`),
             "PATCH",
-            data,
+            withModuleId(data),
         );
     }
 
-    async deleteLesson(id: number): Promise<void> {
+    async deleteLesson(id: LessonId): Promise<void> {
         return await this._request<void>(
             this.buildUrl(`/api/core/schedule/lessons/${id}/`),
             "DELETE",
         );
     }
 
-    async setLessonForClass(classId: number, lessonId: null | number): Promise<void> {
+    async setLessonForClass(classId: number, lessonId: LessonId | null): Promise<void> {
         return await this._request<void>(
             this.buildUrl(`/api/core/management/classes/${classId}/lesson/`),
             "POST",
@@ -1210,21 +1222,21 @@ export class HiveClient {
         );
     }
 
-    async getLessonRules(parentId: number): Promise<Array<LessonRule>> {
+    async getLessonRules(parentId: LessonId): Promise<Array<LessonRule>> {
         return await this._request<Array<LessonRule>>(
             this.buildUrl(`/api/core/schedule/lessons/${parentId}/rules/`),
             "GET",
         );
     }
 
-    async getLessonRule(parentId: number, id: number): Promise<LessonRule> {
+    async getLessonRule(parentId: LessonId, id: number): Promise<LessonRule> {
         return await this._request<LessonRule>(
             this.buildUrl(`/api/core/schedule/lessons/${parentId}/rules/${id}/`),
             "GET",
         );
     }
 
-    async createLessonRule(parentId: number, data: LessonRuleRequest): Promise<LessonRule> {
+    async createLessonRule(parentId: LessonId, data: LessonRuleRequest): Promise<LessonRule> {
         return await this._request<LessonRule>(
             this.buildUrl(`/api/core/schedule/lessons/${parentId}/rules/`),
             "POST",
@@ -1233,7 +1245,7 @@ export class HiveClient {
     }
 
     async updateLessonRule(
-        parentId: number,
+        parentId: LessonId,
         id: number,
         data: LessonRuleRequest,
     ): Promise<LessonRule> {
@@ -1245,7 +1257,7 @@ export class HiveClient {
     }
 
     async patchLessonRule(
-        parentId: number,
+        parentId: LessonId,
         id: number,
         data: Partial<LessonRuleRequest>,
     ): Promise<LessonRule> {
@@ -1256,7 +1268,7 @@ export class HiveClient {
         );
     }
 
-    async deleteLessonRule(parentId: number, id: number): Promise<void> {
+    async deleteLessonRule(parentId: LessonId, id: number): Promise<void> {
         return await this._request<void>(
             this.buildUrl(`/api/core/schedule/lessons/${parentId}/rules/${id}/`),
             "DELETE",

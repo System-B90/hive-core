@@ -9,7 +9,7 @@
  */
 
 import { HiveClient } from "./client.js";
-import { HiveClientError } from "./errors.js";
+import { HiveClientError, hiveFetch } from "./errors.js";
 
 export type HiveServiceCredentials = {
     username: string;
@@ -68,7 +68,7 @@ type HiveClientConstructor<C extends HiveClient> = new (
  * Exchanges service-account credentials for a Hive access/refresh token pair.
  * @param credentials The service account's username, password and Hive URL.
  * @returns The freshly issued token pair.
- * @throws HiveClientError when Hive rejects the credentials or is unreachable.
+ * @throws HiveClientError when Hive rejects the credentials; HiveConnectionError when Hive is unreachable.
  */
 export async function obtainHiveServiceTokens(
     credentials: HiveServiceCredentials,
@@ -79,7 +79,7 @@ export async function obtainHiveServiceTokens(
         ""
     ).replace(/\/$/, "");
 
-    const response = await fetch(`${baseUrl}/api/core/token/`, {
+    const response = await hiveFetch(`${baseUrl}/api/core/token/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -202,3 +202,58 @@ export function parseNetworkTimeoutError(error: unknown) {
         port: error.cause.port,
     };
 }
+
+/**
+ * Turns a connection-level fetch failure (DNS lookup, TCP reset, connect
+ * timeout) into a `HiveConnectionError` with an actionable message. HTTP-level
+ * failures never reach here — fetch only rejects when no response arrived.
+ * @param error Whatever a fetch call rejected with.
+ * @returns A `HiveConnectionError` for a recognised network failure; the
+ * original error untouched otherwise (including errors that already are
+ * `HiveError`s).
+ */
+export function classifyHiveNetworkError(error: unknown): unknown {
+    if (error instanceof HiveError) {
+        return error;
+    }
+
+    const hostNotFound = parseNetworkHostNotFoundError(error);
+    if (hostNotFound) {
+        return new HiveConnectionError(
+            `Failed to resolve DNS ${hostNotFound.hostname}. Check the configured Hive hostname.`,
+        );
+    }
+
+    const connectionReset = parseNetworkConnectionResetError(error);
+    if (connectionReset) {
+        return new HiveConnectionError(
+            `Failed to connect to ${connectionReset.host}:${connectionReset.port}. Port returned TCP Reset. Is Hive running? Are the docker ports forwarded?`,
+        );
+    }
+
+    const connectionTimeout = parseNetworkTimeoutError(error);
+    if (connectionTimeout) {
+        return new HiveConnectionError(
+            `Connection timed out on ${connectionTimeout.host}. Is Hive healthy?`,
+        );
+    }
+
+    return error;
+}
+
+/**
+ * `fetch`, with connection-level failures rethrown as `HiveConnectionError`.
+ * @param input Same as `fetch`.
+ * @param init Same as `fetch`.
+ * @returns The response, for any HTTP status.
+ */
+export async function hiveFetch(
+    input: string | URL,
+    init?: RequestInit,
+): Promise<Response> {
+    try {
+        return await fetch(input, init);
+    } catch (error: unknown) {
+        throw classifyHiveNetworkError(error);
+    }
+}
