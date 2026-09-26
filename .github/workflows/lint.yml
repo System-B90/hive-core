@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
     lint:
-        name: ESLint + typecheck
+        name: ESLint + Typecheck
         runs-on: ${{ (inputs.runner == 'github-hosted' || vars.CI_RUNNER == 'github-hosted') && 'ubuntu-latest' || fromJSON('["self-hosted", "Linux", "node"]') }}
         timeout-minutes: 10
 

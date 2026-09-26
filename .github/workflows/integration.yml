@@ -21,7 +21,7 @@ permissions:
 
 jobs:
     hive-client-integration:
-        name: HiveClient vs shared Hive
+        name: HiveClient vs Shared Hive
         # The persistent shared Hive lives on the shared-hive runners only
         # (mks90-laptop-wsl*); shared-hive-acquire fails anywhere else.
         runs-on: [self-hosted, shared-hive]
