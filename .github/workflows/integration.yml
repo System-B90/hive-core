@@ -2,6 +2,15 @@ name: Integration Tests
 
 on:
     workflow_dispatch:
+        inputs:
+            runner:
+                description: 'Runner environment to execute on'
+                required: false
+                default: 'self-hosted'
+                type: choice
+                options:
+                    - self-hosted
+                    - github-hosted
     # Master only, deliberately. This suite boots a full Hive stack on the
     # org's single self-hosted box and runs for the best part of an hour.
     # Per-pull-request runs spent that shared box on branches that get
@@ -19,7 +28,7 @@ jobs:
         name: HiveClient vs real Hive
         # The org is out of GitHub-hosted Actions minutes — everything runs on
         # the self-hosted pool.
-        runs-on: [self-hosted, dind]
+        runs-on: ${{ (inputs.runner == 'github-hosted' || vars.CI_RUNNER == 'github-hosted') && 'ubuntu-latest' || fromJSON('["self-hosted", "dind"]') }}
         timeout-minutes: 45
 
         steps:
