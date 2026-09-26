@@ -1,6 +1,6 @@
 {
     "name": "@system-b90/hive-core",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "Hive LMS entity types, error hierarchy, and API client core shared across System-B90 apps",
     "license": "UNLICENSED",
     "repository": {
